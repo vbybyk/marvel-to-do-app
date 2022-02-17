@@ -95,9 +95,9 @@ class CharList extends Component {
 
         return (
         <div className="char__list">
-            <ul className="char__grid">
-                {errorMessage}
-                {spinner}
+            {spinner}
+            {errorMessage}
+            <ul className="char__grid"> 
                 {content}
             </ul>
             <button 
