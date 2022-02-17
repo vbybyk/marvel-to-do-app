@@ -1,4 +1,6 @@
 import { Component } from 'react/cjs/react.production.min';
+import PropTypes from 'prop-types';
+
 import MarvelService from '../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
@@ -12,7 +14,7 @@ class CharList extends Component {
         loading: true,
         error: false,
         requestLoading: false,
-        offset: 1540,
+        offset: 1530,
         charsLoaded: false
     }
 
@@ -110,6 +112,10 @@ class CharList extends Component {
         </div>
     )
     }
+}
+
+CharList.propTypes = {
+    onSetActiveChar: PropTypes.func.isRequired
 }
 
 export default CharList;

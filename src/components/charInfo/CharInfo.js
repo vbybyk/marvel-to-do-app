@@ -1,11 +1,12 @@
 import { Component } from 'react/cjs/react.development';
+import PropTypes from 'prop-types';
+
 import MarvelService from '../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
 import Skeleton from '../skeleton/Skeleton'
 
 import './charInfo.scss';
-import thor from '../../resources/img/thor.jpeg';
 
 class CharInfo extends Component {
    
@@ -120,36 +121,13 @@ const CharInfoView = ({char}) => {
             <ul className="char__comics-list">
                 {comics.length > 0 ? null : 'There is no comics with this character'}
                 {comicsList}
-                {/* <li className="char__comics-item">
-                    Alpha Flight (1983) #50
-                </li>
-                <li className="char__comics-item">
-                    Amazing Spider-Man (1999) #503
-                </li>
-                <li className="char__comics-item">
-                    Amazing Spider-Man (1999) #504
-                </li>
-                <li className="char__comics-item">
-                    AMAZING SPIDER-MAN VOL. 7: BOOK OF EZEKIEL TPB (Trade Paperback)
-                </li>
-                <li className="char__comics-item">
-                    Amazing-Spider-Man: Worldwide Vol. 8 (Trade Paperback)
-                </li>
-                <li className="char__comics-item">
-                    Asgardians Of The Galaxy Vol. 2: War Of The Realms (Trade Paperback)
-                </li>
-                <li className="char__comics-item">
-                    Vengeance (2011) #4
-                </li>
-                <li className="char__comics-item">
-                    Avengers (1963) #1
-                </li>
-                <li className="char__comics-item">
-                    Avengers (1996) #1
-                </li> */}
             </ul>
         </>
     )
+}
+
+CharInfo.propTypes = {
+    charId: PropTypes.number
 }
 
 export default CharInfo;
