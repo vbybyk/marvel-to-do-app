@@ -15,7 +15,8 @@ class CharList extends Component {
         error: false,
         requestLoading: false,
         offset: 1530,
-        charsLoaded: false
+        charsLoaded: false,
+        selected: null
     }
 
     marvelService = new MarvelService()
@@ -70,11 +71,12 @@ class CharList extends Component {
     }
 
     updateActiveChar = (id) => {
-        this.props.onSetActiveChar(id)
+        this.props.onSetActiveChar(id);
+        this.setState({selected : id})
     }
 
     render() {
-        const {chars, offset, loading, error, requestLoading, charsLoaded} = this.state;
+        const {chars, offset, loading, error, requestLoading, charsLoaded, selected} = this.state;
         
         const charItems = chars.map(({name, thumbnail, id}) => {
             let imgStyle = {'objectFit': 'cover'}
@@ -82,9 +84,15 @@ class CharList extends Component {
             imgStyle = {'objectFit': 'contain'}
         }
             return (
-                <li className="char__item" 
+                <li className={(id === selected)? "char__item_selected" : "char__item"} 
                     key={id}
-                    onClick={() => this.updateActiveChar(id)}>
+                    tabIndex={0}
+                    onClick={() => this.updateActiveChar(id)}
+                    onKeyPress={(e) => {
+                        if (e.key === ' ' || e.key === "Enter") {
+                            this.updateActiveChar(id);
+                        }
+                    }}>
                     <img src={thumbnail} alt={name} style={imgStyle}/>
                     <div className="char__name">{name}</div>
                 </li>
