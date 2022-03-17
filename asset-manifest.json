@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/marvel-to-do-app/static/css/main.e0dd5ea2.chunk.css",
+    "main.js": "/marvel-to-do-app/static/js/main.67bb3117.chunk.js",
+    "main.js.map": "/marvel-to-do-app/static/js/main.67bb3117.chunk.js.map",
+    "runtime-main.js": "/marvel-to-do-app/static/js/runtime-main.1d4dcb61.js",
+    "runtime-main.js.map": "/marvel-to-do-app/static/js/runtime-main.1d4dcb61.js.map",
+    "static/js/2.67e41a73.chunk.js": "/marvel-to-do-app/static/js/2.67e41a73.chunk.js",
+    "static/js/2.67e41a73.chunk.js.map": "/marvel-to-do-app/static/js/2.67e41a73.chunk.js.map",
+    "index.html": "/marvel-to-do-app/index.html",
+    "static/css/main.e0dd5ea2.chunk.css.map": "/marvel-to-do-app/static/css/main.e0dd5ea2.chunk.css.map",
+    "static/js/2.67e41a73.chunk.js.LICENSE.txt": "/marvel-to-do-app/static/js/2.67e41a73.chunk.js.LICENSE.txt",
+    "static/media/marvel-404-gif.578536df.gif": "/marvel-to-do-app/static/media/marvel-404-gif.578536df.gif",
+    "static/media/mjolnir.61f31e18.png": "/marvel-to-do-app/static/media/mjolnir.61f31e18.png",
+    "static/media/vision.067d4ae1.png": "/marvel-to-do-app/static/media/vision.067d4ae1.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.1d4dcb61.js",
+    "static/js/2.67e41a73.chunk.js",
+    "static/css/main.e0dd5ea2.chunk.css",
+    "static/js/main.67bb3117.chunk.js"
+  ]
+}
