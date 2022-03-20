@@ -47,15 +47,6 @@ const CharList = (props) => {
         setCharsLoaded(charsLoaded => loaded);
     }
 
-    // const updateChars = () => {
-    //     onRequest()
-    // }
-
-
-    // const onCharLoading = () => {
-    //     setLoading(true);
-    // }
-
     const onError = () => {
        setError(true);
        setLoading(false);
@@ -66,8 +57,6 @@ const CharList = (props) => {
         setSelected(id);
     }
 
-    // const {chars, offset, loading, error, requestLoading, charsLoaded} = this.state;
-    
     const charItems = chars.map(({name, thumbnail, id}) => {
         let imgStyle = {'objectFit': 'cover'}
         if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'){
