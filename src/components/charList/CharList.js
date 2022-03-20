@@ -1,4 +1,4 @@
-import { Component } from 'react/cjs/react.production.min';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import MarvelService from '../services/MarvelService';
@@ -7,95 +7,93 @@ import ErrorPage from '../error/Error404';
 
 import './charList.scss';
 
-class CharList extends Component {
+const CharList = (props) => {
+    const [chars, setChars] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [requestLoading, setRequestLoading] = useState(false);
+    const [offset, setOffset] = useState(1530);
+    const [charsLoaded, setCharsLoaded] = useState(false);
+    const [selected, setSelected] = useState(null)
 
-    state = {
-        chars: [],
-        loading: true,
-        error: false,
-        requestLoading: false,
-        offset: 1530,
-        charsLoaded: false
+    const marvelService = new MarvelService()
+
+    useEffect(() => {
+        onRequest();
+    }, [])
+
+    const onRequest = (offset) => {
+        onRequestLoading()
+        marvelService
+                    .getAllCharacters(offset)
+                    .then(onLoadedChars)
+                    .catch(onError)
     }
 
-    marvelService = new MarvelService()
+    const onRequestLoading = () => {
+       setRequestLoading(true);
+    }
 
-    onLoadedChars = (newChars) => {
+    const onLoadedChars = (newChars) => {
         let loaded = false
         if (newChars.length < 9) {
             loaded = true
         }
 
-        this.setState(({chars, offset}) => ({
-            chars: [...chars, ...newChars],
-            loading: false,
-            requestLoading: false,
-            offset: offset + 9,
-            charsLoaded: loaded}))
+        setChars(chars => [...chars, ...newChars]);
+        setLoading(loading => false);
+        setRequestLoading(requestLoading => false);
+        setOffset(offset => offset + 9);
+        setCharsLoaded(charsLoaded => loaded);
     }
 
-    updateChars = () => {
-        this.onRequest()
+    // const updateChars = () => {
+    //     onRequest()
+    // }
+
+
+    // const onCharLoading = () => {
+    //     setLoading(true);
+    // }
+
+    const onError = () => {
+       setError(true);
+       setLoading(false);
     }
 
-    onRequest = (offset) => {
-        this.onRequestLoading()
-        this.marvelService
-                        .getAllCharacters(offset)
-                        .then(this.onLoadedChars)
-                        .catch(this.onError)
+    const updateActiveChar = (id) => {
+        props.onSetActiveChar(id);
+        setSelected(id);
     }
 
-    onCharLoading = () => {
-        this.setState({
-            loading: true,
-        })
+    // const {chars, offset, loading, error, requestLoading, charsLoaded} = this.state;
+    
+    const charItems = chars.map(({name, thumbnail, id}) => {
+        let imgStyle = {'objectFit': 'cover'}
+        if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'){
+        imgStyle = {'objectFit': 'contain'}
     }
-
-    onRequestLoading = () => {
-        this.setState({
-            requestLoading: true,
-        })
-    }
-
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        })
-    }
-
-    componentDidMount() {
-        this.onRequest()
-    }
-
-    updateActiveChar = (id) => {
-        this.props.onSetActiveChar(id)
-    }
-
-    render() {
-        const {chars, offset, loading, error, requestLoading, charsLoaded} = this.state;
-        
-        const charItems = chars.map(({name, thumbnail, id}) => {
-            let imgStyle = {'objectFit': 'cover'}
-            if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'){
-            imgStyle = {'objectFit': 'contain'}
-        }
-            return (
-                <li className="char__item" 
-                    key={id}
-                    onClick={() => this.updateActiveChar(id)}>
-                    <img src={thumbnail} alt={name} style={imgStyle}/>
-                    <div className="char__name">{name}</div>
-                </li>
-            )
-        }) 
-
-        const errorMessage = error ? <ErrorPage/> : null;
-        const spinner = loading ? <Spinner/> : null;
-        const content = !(loading || error) ? charItems : null;
-
         return (
+           <li className={(id === selected)? "char__item_selected" : "char__item"} 
+                     key={id}
+                     tabIndex={0}
+                     onClick={() => updateActiveChar(id)}
+                     onKeyPress={(e) => {
+                         if (e.key === ' ' || e.key === "Enter") {
+                             updateActiveChar(id);
+                         }
+                     }}>
+                     <img src={thumbnail} alt={name} style={imgStyle}/>
+                     <div className="char__name">{name}</div>
+                 </li>
+        )
+    }) 
+
+    const errorMessage = error ? <ErrorPage/> : null;
+    const spinner = loading ? <Spinner/> : null;
+    const content = !(loading || error) ? charItems : null;
+
+    return (
         <div className="char__list">
             {spinner}
             {errorMessage}
@@ -106,12 +104,11 @@ class CharList extends Component {
                 className="button button__main button__long"
                 disabled={requestLoading}
                 style={{'display': charsLoaded? 'none' : 'block'}}
-                onClick={() => this.onRequest(offset)}>
+                onClick={() => onRequest(offset)}>
                 <div className="inner">load more</div>
             </button>
         </div>
-    )
-    }
+    )      
 }
 
 CharList.propTypes = {
