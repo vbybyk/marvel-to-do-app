@@ -24,11 +24,6 @@ const CharInfo = (props) => {
         updateChar();
     }, [props.charId])
 
-    // componentDidUpdate(prevProps) {
-    //     if (prevProps.charId !== this.props.charId){
-    //         this.updateChar()
-    //     }
-    // }
 
     const onLoadedChar = (char) => {
        setChar(char);

@@ -1,4 +1,4 @@
-import { Component } from 'react/cjs/react.production.min';
+import { useState, useEffect } from 'react';
 import MarvelService from '../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
@@ -7,65 +7,58 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 
-class RandomChar extends Component {
+const RandomChar = (props) => {
     
-    state = {
-        char: {},
-    /*  name: null,
-        description: null,
-        thumbnail: null,
-        homepage: null,
-        wiki: null */
+    const [char, setChar] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    // state = {
+    //     char: {},
+    // /*  name: null,
+    //     description: null,
+    //     thumbnail: null,
+    //     homepage: null,
+    //     wiki: null */
        
-        loading: true,
-        error: false
+    //     loading: true,
+    //     error: false
+    // }
+
+    const marvelService = new MarvelService()
+
+    useEffect(() => {
+        updateChar();
+    }, [])
+
+    const onLoadedChar = (char) => {
+        setChar(char);
+        setLoading(false);
     }
 
-    marvelService = new MarvelService()
-
-    componentDidMount() {
-        this.updateChar()
+    const onCharLoading = () => {
+        setLoading(true);
     }
 
-    componentWillUnmount() {
-
+    const onError = () => {
+        setError(true);
+        setLoading(false);
     }
 
-    onLoadedChar = (char) => {
-        this.setState({char, loading: false})
-    }
-
-    onCharLoading = () => {
-        this.setState({
-            loading: true,
-        })
-    }
-
-    onError = () => {
-        this.setState({
-            loading: false,
-            error: true
-        })
-    }
-
-    updateChar = () => {
+    const updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000)
 
-        this.onCharLoading()
-        this.marvelService
-                        .getCharacter(id)
-                        .then(this.onLoadedChar)
-                        .catch(this.onError)
+        onCharLoading()
+        marvelService
+                    .getCharacter(id)
+                    .then(onLoadedChar)
+                    .catch(onError)
     }
-
-    render() {
-        const {char, loading, error} = this.state;
         
         const spinner = loading ? <Spinner/> : null;
         const errorMessage = error ? <ErrorPage/> : null;
         const content = !(loading || error) ? <CharView char={char}/> : null;
 
-        return (
+    return (
         <div className="randomchar">
             {spinner}
             {errorMessage}
@@ -79,14 +72,13 @@ class RandomChar extends Component {
                     Or choose another one
                 </p>
                 <button className="button button__main"
-                        onClick={this.updateChar}>
+                        onClick={updateChar}>
                     <div className="inner">try it</div>
                 </button>
                 <img src={mjolnir} alt="mjolnir" className="randomchar__decoration" />
             </div>
         </div>
-    )
-    }
+        )
 }
 
 const CharView = ({char}) => {
