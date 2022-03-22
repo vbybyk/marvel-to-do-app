@@ -12,7 +12,7 @@ export const useHttp = () => {
         const response = await fetch(url, {method, body, headers});
 
         if (!response.ok){
-        return console.log(`Couldn't get fetch ${url} Status: ${response.status}`)
+          throw console.log(`Couldn't get fetch ${url} Status: ${response.status}`)
         }
 
         const data = await response.json();
@@ -20,10 +20,11 @@ export const useHttp = () => {
         setLoading(false)
         return data;
       
-      } catch(e){
+      } catch(e) {
 
-        setLoading(true);
-        setError(e.message);
+        setLoading(false);
+        console.log('error')
+        setError(true);
         throw e;
       }
   }, [])
