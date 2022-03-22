@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import MarvelService from '../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
 
@@ -9,29 +9,21 @@ import './charList.scss';
 
 const CharList = (props) => {
     const [chars, setChars] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [requestLoading, setRequestLoading] = useState(false);
     const [offset, setOffset] = useState(1530);
     const [charsLoaded, setCharsLoaded] = useState(false);
     const [selected, setSelected] = useState(null)
 
-    const marvelService = new MarvelService()
+    const {loading, error, getAllCharacters} = useMarvelService()
 
     useEffect(() => {
-        onRequest();
+        onRequest(offset, true);
     }, [])
 
-    const onRequest = (offset) => {
-        onRequestLoading()
-        marvelService
-                    .getAllCharacters(offset)
+    const onRequest = (offset, initial) => {
+        initial ? setRequestLoading(false) : setRequestLoading(true);
+        getAllCharacters(offset)
                     .then(onLoadedChars)
-                    .catch(onError)
-    }
-
-    const onRequestLoading = () => {
-       setRequestLoading(true);
     }
 
     const onLoadedChars = (newChars) => {
@@ -41,15 +33,9 @@ const CharList = (props) => {
         }
 
         setChars(chars => [...chars, ...newChars]);
-        setLoading(loading => false);
         setRequestLoading(requestLoading => false);
         setOffset(offset => offset + 9);
         setCharsLoaded(charsLoaded => loaded);
-    }
-
-    const onError = () => {
-       setError(true);
-       setLoading(false);
     }
 
     const updateActiveChar = (id) => {
@@ -80,14 +66,13 @@ const CharList = (props) => {
 
     const errorMessage = error ? <ErrorPage/> : null;
     const spinner = loading ? <Spinner/> : null;
-    const content = !(loading || error) ? charItems : null;
-
+    
     return (
         <div className="char__list">
             {spinner}
             {errorMessage}
             <ul className="char__grid"> 
-                {content}
+                {charItems}
             </ul>
             <button 
                 className="button button__main button__long"
