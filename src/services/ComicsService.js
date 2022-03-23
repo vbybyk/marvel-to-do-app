@@ -6,10 +6,10 @@ const useComicsService = () => {
 
   const _ApiBase = 'https://gateway.marvel.com:443/v1/public';
   const _ApiKey = 'apikey=c0f7aa699e78f7dd434a9b1612278a6b';
-  const _BasicOffset = 50;
+  const _BasicOffset = 150;
 
   const getAllComics = async (offset = _BasicOffset) => {
-    const res = await request(`${_ApiBase}/comics?limit=9&offset=${offset}&${_ApiKey}`);
+    const res = await request(`${_ApiBase}/comics?limit=8&offset=${offset}&${_ApiKey}`);
     return res.data.results.map(_transformComics)
   }
   const getSingleComic = async (id) => {

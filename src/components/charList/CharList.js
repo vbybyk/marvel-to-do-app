@@ -47,7 +47,7 @@ const CharList = (props) => {
         let imgStyle = {'objectFit': 'cover'}
         if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'){
         imgStyle = {'objectFit': 'contain'}
-    }
+        }
         return (
            <li className={(id === selected)? "char__item_selected" : "char__item"} 
                      key={id}
