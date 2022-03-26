@@ -20,8 +20,10 @@ const useComicsService = () => {
     return {
         id: com.id,
         title: com.title,
-        // description: com.description,
+        description: com.description || 'There is no description',
+        pageCount: com.pageCount ? `${com.pageCount} p.` : 'No information about the number of pages',
         thumbnail: com.thumbnail.path + '.' + com.thumbnail.extension,
+        language: com.textObjects.language || 'en-us',
         homepage: com.urls[0].url,
         // wiki: com.urls[1].url,
         prices: com.prices[0].price

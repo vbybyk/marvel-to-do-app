@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+import { Link } from 'react-router-dom';
 import useComicsService from '../../services/ComicsService';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
@@ -54,11 +54,11 @@ const ComicsList = (props) => {
                 //         }
                 //     }}
                 >
-                <a href="#">
+                <Link to={`/comics/${id}`}>
                     <img src={thumbnail} alt={`picture of ${title}`} style={imgStyle} className="comics__item-img"/>
                     <div className="comics__item-name">{title}</div>
                     <div className="comics__item-price">{`${prices}$`}</div>
-                </a>
+                </Link>
                 </li>
         )
     })
