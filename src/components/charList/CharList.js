@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
@@ -12,7 +13,7 @@ const CharList = (props) => {
     const [requestLoading, setRequestLoading] = useState(false);
     const [offset, setOffset] = useState(1530);
     const [charsLoaded, setCharsLoaded] = useState(false);
-    const [selected, setSelected] = useState(null)
+    const [selected, setSelected] = useState(null);
 
     const {loading, error, getAllCharacters} = useMarvelService()
 
@@ -24,6 +25,7 @@ const CharList = (props) => {
         initial ? setRequestLoading(false) : setRequestLoading(true);
         getAllCharacters(offset)
                     .then(onLoadedChars)
+                    // .then(() => setInProp(true))
     }
 
     const onLoadedChars = (newChars) => {
@@ -44,13 +46,15 @@ const CharList = (props) => {
     }
 
     const charItems = chars.map(({name, thumbnail, id}) => {
+        
         let imgStyle = {'objectFit': 'cover'}
         if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'){
         imgStyle = {'objectFit': 'contain'}
         }
         return (
-           <li className={(id === selected)? "char__item_selected" : "char__item"} 
-                     key={id}
+           <CSSTransition key={id} timeout={400} classNames="char__item">
+               <li className={(id === selected)? "char__item_selected" : "char__item"} 
+                     
                      tabIndex={0}
                      onClick={() => updateActiveChar(id)}
                      onKeyPress={(e) => {
@@ -58,9 +62,10 @@ const CharList = (props) => {
                              updateActiveChar(id);
                          }
                      }}>
-                     <img src={thumbnail} alt={name} style={imgStyle}/>
-                     <div className="char__name">{name}</div>
-                 </li>
+                <img src={thumbnail} alt={name} style={imgStyle}/>
+                <div className="char__name">{name}</div>
+            </li>
+           </CSSTransition>
         )
     }) 
 
@@ -72,7 +77,9 @@ const CharList = (props) => {
             {spinner}
             {errorMessage}
             <ul className="char__grid"> 
-                {charItems}
+                <TransitionGroup className="transition-group" component={null}>
+                    {charItems}
+                </TransitionGroup>
             </ul>
             <button 
                 className="button button__main button__long"
