@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import useMarvelService from '../../services/MarvelService';
+import CharForm from '../form/CharForm';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
 import Skeleton from '../skeleton/Skeleton'
@@ -46,12 +47,14 @@ const CharInfo = (props) => {
     const content = !(loading || error || !char) ? <CharInfoView char={char}/> : null;
 
     return (
-    <div className="char__info">
-        {skeleton}
-        {spinner}
-        {errorMessage}
-        {content}
-    </div>
+    <>
+        <div className="char__info">
+            {skeleton}
+            {spinner}
+            {errorMessage}
+            {content}
+        </div>
+    </>
     )
 }
 

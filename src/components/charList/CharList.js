@@ -44,7 +44,6 @@ const CharList = (props) => {
         props.onSetActiveChar(id);
         setSelected(id);
     }
-
     const charItems = chars.map(({name, thumbnail, id}) => {
         
         let imgStyle = {'objectFit': 'cover'}
