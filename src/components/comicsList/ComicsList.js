@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import {Helmet} from 'react-helmet';
 import useComicsService from '../../services/ComicsService';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
@@ -68,6 +69,13 @@ const ComicsList = (props) => {
 
     return (
         <div className="comics__list">
+            <Helmet>
+                <meta
+                    name="description"
+                    content="Comics list"
+                />
+                <title>Marvel Comics list</title>
+            </Helmet>
             {spinner}
             {errorMessage}
             <ul className="comics__grid">

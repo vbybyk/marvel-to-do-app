@@ -1,12 +1,12 @@
 import { useParams, Link} from 'react-router-dom';
 import {useState, useEffect } from 'react';
+import {Helmet} from 'react-helmet';
 
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
 
 import './singleChar.scss';
-import xMen from '../../resources/img/x-men.png';
 
 const SingleChar = () => {
     const {charId} = useParams();
@@ -50,6 +50,13 @@ const ViewChar = ({char}) => {
     
     return (
         <div className="single-char">
+            <Helmet>
+                <meta
+                    name="description"
+                    content={`Page about ${name}`}
+                />
+                <title>{name} page</title>
+            </Helmet>
             <img src={thumbnail} alt="x-men" className="single-char__img"/>
             <div className="single-char__info">
                 <h2 className="single-char__name">{name}</h2>

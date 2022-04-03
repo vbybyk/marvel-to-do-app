@@ -1,12 +1,12 @@
 import { useParams, Link} from 'react-router-dom';
 import {useState, useEffect } from 'react';
+import {Helmet} from 'react-helmet';
 
 import useComicsService from '../../services/ComicsService';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
 
 import './singleComic.scss';
-import xMen from '../../resources/img/x-men.png';
 
 const SingleComic = () => {
     const {comicId} = useParams();
@@ -50,6 +50,13 @@ const ViewComic = ({comic}) => {
     
     return (
         <div className="single-comic">
+            <Helmet>
+                <meta
+                    name="description"
+                    content={`Page about ${title} comics`}
+                />
+                <title>{title}</title>
+            </Helmet>
             <img src={thumbnail} alt="x-men" className="single-comic__img"/>
             <div className="single-comic__info">
                 <h2 className="single-comic__name">{title}</h2>
