@@ -65,6 +65,7 @@ const ViewChar = ({char}) => {
             <Link to="/" className="single-char__back">Back to all</Link>
         </div>
     )
+    
 }
 
 export default SingleChar;
