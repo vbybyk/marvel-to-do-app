@@ -8,6 +8,25 @@ import ErrorPage from '../error/Error404';
 
 import './charList.scss';
 
+const setContent = (process, Component, requestLoading) => {
+        switch (process) {
+            case 'waiting' :
+                return <Spinner/>
+                break;
+            case 'loading' :
+                return requestLoading ? <Component/> : <Spinner/>
+                break;
+            case 'confirmed' :
+                return <Component/>
+                break;
+            case 'error' :
+                return <ErrorPage/>
+                break;
+            default :
+                throw new Error('Unexpected process state');
+        }
+    }
+
 const CharList = (props) => {
     const [chars, setChars] = useState([]);
     const [requestLoading, setRequestLoading] = useState(false);
@@ -15,16 +34,17 @@ const CharList = (props) => {
     const [charsLoaded, setCharsLoaded] = useState(false);
     const [selected, setSelected] = useState(null);
 
-    const {loading, error, getAllCharacters} = useMarvelService()
+    const {loading, error, getAllCharacters, process, setProcess} = useMarvelService()
 
     useEffect(() => {
-        onRequest();
+        onRequest(offset, true);
     }, [])
 
     const onRequest = (offset, initial) => {
         initial ? setRequestLoading(false) : setRequestLoading(true);
         getAllCharacters(offset)
                     .then(onLoadedChars)
+                    .then(() => setProcess('confirmed'));  // !! State-Machine
                     // .then(() => setInProp(true))
     }
 
@@ -44,7 +64,9 @@ const CharList = (props) => {
         props.onSetActiveChar(id);
         setSelected(id);
     }
-    const charItems = chars.map(({name, thumbnail, id}) => {
+    
+    const renderItems = arr => {
+        const charItems = arr.map(({name, thumbnail, id}) => {
         
         let imgStyle = {'objectFit': 'cover'}
         if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'){
@@ -66,20 +88,24 @@ const CharList = (props) => {
             </li>
            </CSSTransition>
         )
-    }) 
+    });
+    return(
+        <ul className="char__grid"> 
+                <TransitionGroup className="transition-group" component={null}>
+                    {charItems}
+                </TransitionGroup>
+            </ul>
+    )
+    }
 
     const errorMessage = error ? <ErrorPage/> : null;
     const spinner = loading ? <Spinner/> : null;
     
     return (
         <div className="char__list">
-            {spinner}
-            {errorMessage}
-            <ul className="char__grid"> 
-                <TransitionGroup className="transition-group" component={null}>
-                    {charItems}
-                </TransitionGroup>
-            </ul>
+            {/* {spinner}
+            {errorMessage} */}
+            {setContent(process, () => renderItems(chars), requestLoading)}
             <button 
                 className="button button__main button__long"
                 disabled={requestLoading}

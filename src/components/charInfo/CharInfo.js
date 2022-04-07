@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import useMarvelService from '../../services/MarvelService';
-import CharForm from '../form/CharForm';
+import setContent from '../../utils/setContent';
 import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
 import Skeleton from '../skeleton/Skeleton'
@@ -14,7 +14,7 @@ const CharInfo = (props) => {
     
     const [char, setChar] = useState(null);
     
-    const {loading, error, getCharacter, clearError} = useMarvelService()
+    const {loading, error, getCharacter, clearError, process, setProcess} = useMarvelService()
     
     useEffect(() => {
         updateChar();
@@ -39,28 +39,32 @@ const CharInfo = (props) => {
 
        getCharacter(charId)
                     .then(onLoadedChar)
+                    .then(() => setProcess('confirmed'));  // !! State-Machine
     }
+
         
-    const skeleton = char || loading || error ? null : <Skeleton/>
-    const spinner = loading ? <Spinner/> : null;
-    const errorMessage = error ? <ErrorPage/> : null;
-    const content = !(loading || error || !char) ? <CharInfoView char={char}/> : null;
+    // const skeleton = char || loading || error ? null : <Skeleton/>
+    // const spinner = loading ? <Spinner/> : null;
+    // const errorMessage = error ? <ErrorPage/> : null;
+    // const content = !(loading || error || !char) ? <CharInfoView char={char}/> : null;
 
     return (
     <>
         <div className="char__info">
-            {skeleton}
+            {/* {skeleton}
             {spinner}
             {errorMessage}
-            {content}
+            {content} */}
+
+            {setContent(process, CharInfoView, char)}
         </div>
     </>
     )
 }
 
-const CharInfoView = ({char}) => {
+const CharInfoView = ({data}) => {
 
-    const {name, thumbnail, description, wiki, homepage, comics} = char;
+    const {name, thumbnail, description, wiki, homepage, comics} = data;
 
     let imgStyle = {'objectFit' : 'cover'};
     if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
