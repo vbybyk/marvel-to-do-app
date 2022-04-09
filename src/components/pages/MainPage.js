@@ -14,7 +14,7 @@ const MainPage = () => {
   const onSetActiveChar = (id) => {
         setChar(id);
   }
-
+  console.log('main page render')
   return(
     <>
       <Helmet>

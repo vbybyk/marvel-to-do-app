@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
@@ -7,6 +7,7 @@ import Spinner from '../spinner/Spinner';
 import ErrorPage from '../error/Error404';
 
 import './charList.scss';
+import { useMemo } from 'react';
 
 const setContent = (process, Component, requestLoading) => {
         switch (process) {
@@ -66,6 +67,7 @@ const CharList = (props) => {
     }
     
     const renderItems = arr => {
+        console.log('char list render')
         const charItems = arr.map(({name, thumbnail, id}) => {
         
         let imgStyle = {'objectFit': 'cover'}
@@ -98,14 +100,18 @@ const CharList = (props) => {
     )
     }
 
-    const errorMessage = error ? <ErrorPage/> : null;
-    const spinner = loading ? <Spinner/> : null;
+    // const errorMessage = error ? <ErrorPage/> : null;
+    // const spinner = loading ? <Spinner/> : null;
     
+    const elements = useMemo(() => {
+        return setContent(process, () => renderItems(chars), requestLoading)
+    }, [process, selected])
+
     return (
         <div className="char__list">
             {/* {spinner}
             {errorMessage} */}
-            {setContent(process, () => renderItems(chars), requestLoading)}
+            {elements}
             <button 
                 className="button button__main button__long"
                 disabled={requestLoading}
